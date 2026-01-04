@@ -11,7 +11,6 @@ interface EyePosition {
 
 export function EyeTrackingPortrait() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [eyeOffsets, setEyeOffsets] = useState({ left: { x: 0, y: 0 }, right: { x: 0, y: 0 } });
 
   // Eye positions (relative to image, will need adjustment based on actual image)
@@ -86,8 +85,6 @@ export function EyeTrackingPortrait() {
         left: calculateEyeOffset(eyePositions.left),
         right: calculateEyeOffset(eyePositions.right),
       });
-
-      setMousePos({ x: mouseX, y: mouseY });
     };
 
     window.addEventListener('mousemove', handleMouseMove);

@@ -317,10 +317,10 @@ const RotaryPhone = () => {
                 <div className="h-px w-full bg-gradient-to-r from-[#00ff41] to-transparent"></div>
                 <div className="font-['Space_Mono'] text-[#00ff41]/90">
                   <p className="text-sm mb-2">Contact Email:</p>
-                  <p className="text-lg font-bold text-[#00ff41] break-all">ohamjdung196@gmail.com</p>
+                  <p className="text-lg font-bold text-[#00ff41] break-all">QuocDung.Pham@UTDallas.edu</p>
                 </div>
                 <button
-                  onClick={() => window.location.href = "mailto:ohamjdung196@gmail.com"}
+                  onClick={() => window.location.href = "mailto:QuocDung.Pham@UTDallas.edu"}
                   className="w-full px-4 py-2 bg-[#00ff41] text-black hover:bg-[#00ff41]/80 transition-colors font-['Space_Mono'] text-sm tracking-wider"
                 >
                   OPEN MAIL CLIENT
@@ -488,7 +488,7 @@ function App() {
                   GITHUB
                 </motion.a>
                 <motion.a
-                  href="mailto:ohamjdung196@gmail.com"
+                  href="mailto:QuocDung.Pham@UTDallas.edu "
                   className="px-6 py-3 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors font-['Space_Mono'] text-sm tracking-wider flex items-center gap-2"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
