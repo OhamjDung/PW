@@ -376,6 +376,8 @@ function App() {
   }
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showEmailPopup, setShowEmailPopup] = useState(false);
+  const [showPhonePopup, setShowPhonePopup] = useState(false);
 
   const projects: Project[] = [
     {
@@ -440,7 +442,7 @@ function App() {
       {/* Main content */}
       <div className="relative z-10">
         {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center px-4 py-20">
+        <section id="hero" className="min-h-screen flex items-center justify-center px-4 py-20 relative">
           <div className="max-w-6xl w-full">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -487,15 +489,15 @@ function App() {
                   <Github size={18} />
                   GITHUB
                 </motion.a>
-                <motion.a
-                  href="mailto:QuocDung.Pham@UTDallas.edu "
+                <motion.button
+                  onClick={() => setShowEmailPopup(true)}
                   className="px-6 py-3 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors font-['Space_Mono'] text-sm tracking-wider flex items-center gap-2"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Mail size={18} />
                   EMAIL
-                </motion.a>
+                </motion.button>
                 <motion.a
                   href="https://www.linkedin.com/in/datatompham/"
                   target="_blank"
@@ -507,18 +509,74 @@ function App() {
                   <Linkedin size={18} />
                   LINKEDIN
                 </motion.a>
-                <motion.a
-                  href="tel:9453425051"
+                <motion.button
+                  onClick={() => setShowPhonePopup(true)}
                   className="px-6 py-3 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors font-['Space_Mono'] text-sm tracking-wider flex items-center gap-2"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Phone size={18} />
                   PHONE
-                </motion.a>
+                </motion.button>
               </div>
             </motion.div>
           </div>
+
+          {/* Email Popup - Centered in Hero Section */}
+          {showEmailPopup && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+              <div className="w-full max-w-md bg-[#050505] border border-[#00ff41] p-6 shadow-[0_0_50px_rgba(0,255,65,0.2)] relative">
+                <button 
+                  onClick={() => setShowEmailPopup(false)}
+                  className="absolute -top-3 -right-3 bg-[#00ff41] text-black p-1 hover:bg-white"
+                >
+                  <X size={20} />
+                </button>
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-[#00ff41] font-['VT323'] uppercase tracking-wider">EMAIL ACCESSED</h3>
+                  <div className="h-px w-full bg-gradient-to-r from-[#00ff41] to-transparent"></div>
+                  <div className="font-['Space_Mono'] text-[#00ff41]/90">
+                    <p className="text-sm mb-2">Contact Email:</p>
+                    <p className="text-lg font-bold text-[#00ff41] break-all">QuocDung.Pham@UTDallas.edu</p>
+                  </div>
+                  <button
+                    onClick={() => window.location.href = "mailto:QuocDung.Pham@UTDallas.edu"}
+                    className="w-full px-4 py-2 bg-[#00ff41] text-black hover:bg-[#00ff41]/80 transition-colors font-['Space_Mono'] text-sm tracking-wider"
+                  >
+                    OPEN MAIL CLIENT
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Phone Popup - Centered in Hero Section */}
+          {showPhonePopup && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+              <div className="w-full max-w-md bg-[#050505] border border-[#00ff41] p-6 shadow-[0_0_50px_rgba(0,255,65,0.2)] relative">
+                <button 
+                  onClick={() => setShowPhonePopup(false)}
+                  className="absolute -top-3 -right-3 bg-[#00ff41] text-black p-1 hover:bg-white"
+                >
+                  <X size={20} />
+                </button>
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-[#00ff41] font-['VT323'] uppercase tracking-wider">PHONE ACCESSED</h3>
+                  <div className="h-px w-full bg-gradient-to-r from-[#00ff41] to-transparent"></div>
+                  <div className="font-['Space_Mono'] text-[#00ff41]/90">
+                    <p className="text-sm mb-2">Contact Number:</p>
+                    <p className="text-lg font-bold text-[#00ff41]">(945) 342-5051</p>
+                  </div>
+                  <button
+                    onClick={() => window.location.href = "tel:9453425051"}
+                    className="w-full px-4 py-2 bg-[#00ff41] text-black hover:bg-[#00ff41]/80 transition-colors font-['Space_Mono'] text-sm tracking-wider"
+                  >
+                    DIAL NUMBER
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* About Section */}
