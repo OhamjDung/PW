@@ -1,0 +1,99 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* Retro 90s Effects */
+@keyframes scan {
+  0%, 100% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-scan {
+  animation: scan 8s linear infinite;
+  height: 200px;
+}
+
+/* Dithered effect using CSS */
+.dithered {
+  position: relative;
+}
+
+.dithered::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0zM2 2h1v1H2z' fill='%2300ff41' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 4px 4px;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Noise texture */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border-left: 1px solid rgba(0, 255, 65, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff41;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff41;
+  box-shadow: 0 0 10px #00ff41;
+}
+
+/* Selection color */
+::selection {
+  background: #00ff41;
+  color: #000;
+}
+
+/* CRT screen curve effect (subtle) */
+body {
+  perspective: 1000px;
+  background-color: #000;
+  color: #00ff41;
+  font-family: 'Space Mono', monospace;
+  overflow-x: hidden;
+}
+
+/* --- IMAGE HOVER EFFECTS --- */
+.img-glitch-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.img-glitch-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, rgba(0, 255, 65, 0.1), rgba(0, 255, 65, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.img-glitch-container:hover::after {
+  opacity: 1;
+}
