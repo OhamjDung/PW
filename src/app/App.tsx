@@ -82,6 +82,7 @@ const RotaryPhone = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const startAngleRef = useRef(0);
+  const hasMovedRef = useRef(false);
 
   const dials = [
     { num: 1, label: 'EMAIL', icon: Mail, link: "EMAIL", desc: "INITIATE MAIL PROTOCOL" },
@@ -118,7 +119,7 @@ const RotaryPhone = () => {
              setShowPhonePopup(true);
              setStatus("PHONE ACCESSED");
         } else if (dial.link && dial.link !== "#") {
-            setTimeout(() => window.location.href = dial.link, 200);
+            setTimeout(() => window.open(dial.link, '_blank', 'noopener,noreferrer'), 200);
         } else {
             setStatus("NO SIGNAL");
             setTimeout(() => setStatus("SECURE LINE // IDLE"), 1000);
@@ -126,8 +127,43 @@ const RotaryPhone = () => {
     }, 700);
   };
 
+  const handleClick = (index: number, e: React.MouseEvent) => {
+    // Only handle click if user didn't drag
+    if (hasMovedRef.current) {
+      hasMovedRef.current = false;
+      return;
+    }
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const dial = dials[index];
+    if (!dial.label) return; // Skip empty dials
+    
+    setActiveDial(index);
+    setStatus(`DIALING ${dial.label}...`);
+    
+    // Calculate the required rotation for this dial
+    const requiredRotation = (index + 1) * 30 + 50;
+    
+    // Animate the rotation
+    setRotation(requiredRotation);
+    setIsDragging(false); // We're not actually dragging, just animating
+    
+    // Hide first-time hint
+    if (showFirstTimeHint) {
+      setShowFirstTimeHint(false);
+    }
+    
+    // After animation completes, perform the action
+    setTimeout(() => {
+      performDialSuccess(index);
+    }, 700);
+  };
+
   const handleStart = (index: number, clientX: number, clientY: number, e: React.MouseEvent | React.TouchEvent) => {
     if(e) e.preventDefault();
+    hasMovedRef.current = false; // Reset movement tracking
     setIsDragging(true);
     setActiveDial(index);
     const angle = getAngle(clientX, clientY);
@@ -142,6 +178,10 @@ const RotaryPhone = () => {
 
   const handleMove = (clientX: number, clientY: number) => {
     if (!isDragging || activeDial === null) return;
+    
+    // Mark that user has moved (not just a click)
+    hasMovedRef.current = true;
+    
     const angle = getAngle(clientX, clientY);
     let delta = angle - startAngleRef.current;
     
@@ -170,6 +210,10 @@ const RotaryPhone = () => {
         setActiveDial(null);
         setStatus("SECURE LINE // IDLE");
     }
+    // Reset movement tracking after a short delay
+    setTimeout(() => {
+      hasMovedRef.current = false;
+    }, 100);
   };
 
   useEffect(() => {
@@ -255,9 +299,10 @@ const RotaryPhone = () => {
                     return (
                         <div
                             key={dial.num}
+                            onClick={(e) => handleClick(i, e)}
                             onMouseDown={(e) => handleStart(i, e.clientX, e.clientY, e)}
                             onTouchStart={(e) => handleStart(i, e.touches[0].clientX, e.touches[0].clientY, e)}
-                            className={`absolute w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-['VT323'] text-3xl transition-all z-20 cursor-grab active:cursor-grabbing ${
+                            className={`absolute w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-['VT323'] text-3xl transition-all z-20 cursor-pointer ${
                                 isActive 
                                     ? 'bg-[#00ff41] text-black shadow-[0_0_30px_#00ff41] scale-110 border-2 border-white' 
                                     : 'bg-black border border-[#00ff41]/50 text-[#00ff41] hover:bg-[#00ff41] hover:text-black hover:shadow-[0_0_20px_#00ff41]'
@@ -458,6 +503,17 @@ function App() {
               </div>
 
               <WireframeGlobe />
+
+              <motion.div
+                className="mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <p className="font-['Space_Mono'] text-xl md:text-2xl text-[#00ff41]/80 tracking-wider mb-2">
+                  DATA SCIENCE
+                </p>
+              </motion.div>
 
               <motion.h1
                 className="font-['VT323'] text-7xl md:text-9xl tracking-wider mb-4"
@@ -699,9 +755,20 @@ function App() {
                 </button>
                 <div className="p-6">
                   {/* Thumbnail Image */}
-                  <div className="w-full h-64 mb-6 border border-[#00ff41]/20 bg-black overflow-hidden">
-                    <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
-                  </div>
+                  {selectedProject.link ? (
+                    <a
+                      href={selectedProject.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full h-64 mb-6 border border-[#00ff41]/20 bg-black overflow-hidden hover:border-[#00ff41] transition-colors cursor-pointer"
+                    >
+                      <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+                    </a>
+                  ) : (
+                    <div className="w-full h-64 mb-6 border border-[#00ff41]/20 bg-black overflow-hidden">
+                      <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+                    </div>
+                  )}
                   
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="text-2xl font-bold text-[#00ff41] font-['VT323'] uppercase tracking-wider flex-1">{selectedProject.title}</h3>
